@@ -1,10 +1,13 @@
 import speech_recognition as sr
 import pyttsx3
 
+from GeminiCommunication import generate
+
 #region Speech Recognition
 r = sr.Recognizer()
 
 def recordText():
+    print("Listening..")
     while 1:
         try:
             with sr.Microphone() as source:
@@ -22,8 +25,26 @@ def recordText():
 
 #endregion
 
-print("Activated..")
+#region Speaking Text
+def SpeakText(command):
+    engine = pyttsx3.init()
+
+    rate = 180
+    engine.setProperty('rate', rate)
+
+    volume = 1.0
+    engine.setProperty('volume', volume)
+
+    voices = engine.getProperty('voices')
+    engine.setProperty('voice', voices[0].id)
+
+    engine.say(command)
+    engine.runAndWait()
+#endregion
 
 while 1:
     text = recordText()
     print(text)
+    response = generate(text)
+    print(response)
+    SpeakText(response)
