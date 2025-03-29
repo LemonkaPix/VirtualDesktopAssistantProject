@@ -36,7 +36,7 @@ def generate(prompt):
             ])
     ]
 
-    systemInstructions = open('SystemInstructions', 'r')
+    systemInstructions = open('SystemInstructions', 'r', encoding='utf-8')
     generate_content_config = types.GenerateContentConfig(
         temperature=2,
         tools=tools,
@@ -54,8 +54,13 @@ def generate(prompt):
         config=generate_content_config,
     ):
         # print(chunk.text if not chunk.function_calls else chunk.function_calls[0], end="")
-        response += chunk.text if not chunk.function_calls else chunk.function_calls[0]
-    return response
+        if not chunk.function_calls:
+            response += chunk.text
+        else:
+            print(chunk.function_calls[0])
+            return
 
-if __name__ == "__main__":
-    print(generate("Witaj Jarvis. Jestem Maciej"))
+    if isinstance(response, bytes):
+        response = response.decode('utf-8')
+
+    return response
