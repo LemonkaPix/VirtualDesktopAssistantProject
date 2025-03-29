@@ -29,7 +29,7 @@ def recordText():
 def SpeakText(command):
     engine = pyttsx3.init()
 
-    rate = 180
+    rate = 190
     engine.setProperty('rate', rate)
 
     volume = 1.0

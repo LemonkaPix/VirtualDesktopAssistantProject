@@ -3,6 +3,7 @@ import os
 from google import genai
 from google.genai import types
 
+from FunctionCalling import callFunctions
 
 def generate(prompt):
     client = genai.Client(
@@ -33,6 +34,11 @@ def generate(prompt):
                         },
                     ),
                 ),
+                types.FunctionDeclaration(
+                    name="getDateTime",
+                    description="gets the current date and time",
+                    parameters=None,
+                ),
             ])
     ]
 
@@ -57,8 +63,8 @@ def generate(prompt):
         if not chunk.function_calls:
             response += chunk.text
         else:
-            print(chunk.function_calls[0])
-            return
+            return callFunctions(chunk.function_calls)
+
 
     if isinstance(response, bytes):
         response = response.decode('utf-8')
