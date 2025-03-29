@@ -5,20 +5,24 @@ from google.genai import types
 
 from FunctionCalling import callFunctions
 
+contents = []
+
 def generate(prompt):
     client = genai.Client(
         api_key=os.environ.get("GEMINI_API_KEY"),
     )
 
     model = "gemini-2.0-flash"
-    contents = [
+
+    globals()['contents'].append(
         types.Content(
             role="user",
             parts=[
                 types.Part.from_text(text=""f"{prompt}"""),
             ],
-        ),
-    ]
+        )
+    )
+
     tools = [
         types.Tool(
             function_declarations=[
@@ -68,5 +72,14 @@ def generate(prompt):
 
     if isinstance(response, bytes):
         response = response.decode('utf-8')
+
+    globals()['contents'].append(
+        types.Content(
+            role="model",
+            parts=[
+                types.Part.from_text(text=""f"{response}"""),
+            ],
+        )
+    )
 
     return response
