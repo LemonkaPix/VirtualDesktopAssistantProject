@@ -1,16 +1,21 @@
 from datetime import datetime
 import json
 
-
+firstCall = True
 
 def callFunctions(functions):
-    from GeminiCommunication import generate
+    if globals()['firstCall']:
+        from GeminiCommunication import generate
+
+    output = ""
 
     for f in functions:
-        return globals()[f.name](f.args)
+        output += f"{f.name}:\n" + globals()[f.name](f.args)
 
-def getWeather(args):
-    return f"pogoda w {args['city']} jest słoneczna"
+    return generate(output)
+
+def quit(args):
+    quit()
 
 def getDateTime(args):
     now = datetime.now()

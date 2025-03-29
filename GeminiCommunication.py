@@ -4,6 +4,7 @@ from google import genai
 from google.genai import types
 
 from FunctionCalling import callFunctions
+from SpeechAndSpeaking import SpeakText
 
 contents = []
 
@@ -27,20 +28,13 @@ def generate(prompt):
         types.Tool(
             function_declarations=[
                 types.FunctionDeclaration(
-                    name="getWeather",
-                    description="gets the weather for a requested city",
-                    parameters=genai.types.Schema(
-                        type = genai.types.Type.OBJECT,
-                        properties = {
-                            "city": genai.types.Schema(
-                                type = genai.types.Type.STRING,
-                            ),
-                        },
-                    ),
+                    name="getDateTime",
+                    description="gets the current date and time, don't respond to me when you want to call this function",
+                    parameters=None,
                 ),
                 types.FunctionDeclaration(
-                    name="getDateTime",
-                    description="gets the current date and time",
+                    name="quit",
+                    description=" gdy się z tobą pożegnam, odpowiedz mi, a następnie wywołaj tą fukcję",
                     parameters=None,
                 ),
             ])
@@ -67,6 +61,8 @@ def generate(prompt):
         if not chunk.function_calls:
             response += chunk.text
         else:
+            if response != "":
+                SpeakText(response)
             return callFunctions(chunk.function_calls)
 
 
