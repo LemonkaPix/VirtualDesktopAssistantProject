@@ -34,9 +34,23 @@ def generate(prompt):
                 ),
                 types.FunctionDeclaration(
                     name="quit",
-                    description=" gdy się z tobą pożegnam, odpowiedz mi, a następnie wywołaj tą fukcję",
+                    description="when I say goodbye to you, answer me and then call this function",
                     parameters=None,
                 ),
+                types.FunctionDeclaration(
+                    name="rememberIt",
+                    description="remembers a given thing",
+                    parameters=genai.types.Schema(
+                        type=genai.types.Type.OBJECT,
+                        required=["thingToremember"],
+                        properties={
+                            "thingToremember": genai.types.Schema(
+                                type=genai.types.Type.STRING,
+                            ),
+                        },
+                    ),
+                ),
+
             ])
     ]
 

@@ -30,3 +30,10 @@ def getDateTime(args):
 
     json_string = json.dumps(data, indent=4)
     return json_string
+
+def rememberIt(args):
+    f = open('SystemInstructions','a')
+    f.write(args.thingToremember)
+    f.close()
+    print("remembered")
+    return ''
